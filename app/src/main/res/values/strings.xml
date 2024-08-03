@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TestIdea</string>
+    <string name="delete_item">Delete item</string>
+    <string name="edit_amount">Edit amount</string>
+    <string name="in_store">На складе</string>
+    <string name="adding_date">Дата добавления</string>
+    <string name="list_page_title">Список товаров</string>
+    <string name="search_product">Поиск товаров</string>
+</resources>
