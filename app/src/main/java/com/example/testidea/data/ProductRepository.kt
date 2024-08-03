@@ -1,4 +1,6 @@
 package com.example.testidea.data
 
-class ProductRepository {
+import com.example.testidea.data.db.ProductDao
+
+class ProductRepository(private val productDao: ProductDao) {
 }

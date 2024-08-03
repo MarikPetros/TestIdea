@@ -6,22 +6,24 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDao {
     // Though in this test don't required, but OnConflictStrategy is useful in case of getting data from remote source.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg products: ProductEntity)
+    suspend fun insertAll(vararg products: ProductEntity)
 
-    @Update
-    fun updateProduct(product: ProductEntity)
+    @Upsert
+    suspend fun updateProduct(product: ProductEntity)
 
     @Delete
-    fun deleteProduct(product: ProductEntity)
+    suspend fun deleteProduct(product: ProductEntity)
 
     @Query("SELECT * FROM products")
-    fun getAllProducts(): List<ProductEntity>
+    fun getAllProducts(): Flow<List<ProductEntity>>
 
     @Query("SELECT * FROM products WHERE name LIKE '%' || :text || '%'")
-    fun getProductsByName(text: String): List<ProductEntity>
+    fun getProductsByName(text: String): Flow<List<ProductEntity>>
 }
