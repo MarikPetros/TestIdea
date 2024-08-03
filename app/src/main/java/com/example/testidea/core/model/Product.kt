@@ -14,7 +14,7 @@ fun Product.toEntity(): ProductEntity {
     return ProductEntity(
         id = id,
         name = name,
-        time = time,
+        time = time, //
         tags = tags,
         amount = amount
     )

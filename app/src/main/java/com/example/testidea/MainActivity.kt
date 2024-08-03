@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val vieModel = koinViewModel<ProductViewModel>()
+//            val viewModel = koinViewModel<ProductViewModel>()
             TestIdeaApp(DummyData().data)
         }
     }

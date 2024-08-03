@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.example.testidea.core.model.Product
 
 @Entity(tableName = "products")
-data class ProductEntity (
+data class ProductEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
