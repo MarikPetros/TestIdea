@@ -1,10 +1,11 @@
 package com.example.testidea.di
 
 import androidx.room.Room
-import com.example.testidea.core.domain.GetProducts
-import com.example.testidea.core.domain.GetProductsFromRemote
-import com.example.testidea.core.domain.RemoveProduct
-import com.example.testidea.core.domain.UpdateProduct
+import com.example.testidea.core.domain.GetProducstsBySearchQuery
+import com.example.testidea.core.domain.GetProductDataFromDB
+import com.example.testidea.core.domain.GetProductDataFromRemote
+import com.example.testidea.core.domain.RemoveProductData
+import com.example.testidea.core.domain.UpdateProductData
 import com.example.testidea.data.DummyData
 import com.example.testidea.data.ProductRepository
 import com.example.testidea.data.db.ProductsDB
@@ -14,7 +15,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val ideaAppModule = module{
+val ideaAppModule = module {
     single {
         Room.databaseBuilder(
             androidApplication(),
@@ -24,11 +25,20 @@ val ideaAppModule = module{
     }
     single { DummyData() }
     single { get<ProductsDB>().productDao() }
-    single{ ProductRepository(get(), Dispatchers.IO) }
-    single { GetProductsFromRemote(get(), get()) }
-    single { GetProducts(get()) }
-    single { RemoveProduct(get()) }
-    single { UpdateProduct(get()) }
+    single { ProductRepository(get(), Dispatchers.IO) }
+
+    single { GetProductDataFromRemote(get(), get()) }
+    single { GetProductDataFromDB(get()) }
+    factory { (repo: ProductRepository, id: Int) -> RemoveProductData(repo, id) }
+    factory { (repo: ProductRepository, string: String) -> GetProducstsBySearchQuery(repo, string) }
+    factory { (repo: ProductRepository, id: Int, amount: Int) ->
+        UpdateProductData(
+            repo,
+            id,
+            amount
+        )
+    }
+
     viewModel { ProductViewModel(get()) }
 }
 

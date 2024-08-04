@@ -5,7 +5,13 @@ For a small app no need for them, and Repository can be provided directly to the
  */
 package com.example.testidea.core.domain
 
+import com.example.testidea.core.model.toEntity
 import com.example.testidea.data.ProductRepository
 
-class RemoveProduct(repo: ProductRepository) {
+class UpdateProductData(
+    private val repository: ProductRepository,
+    private val id: Int,
+    private val amount: Int
+) {
+    suspend operator fun invoke() = repository.updateProductAmount(id = id, amount = amount)
 }

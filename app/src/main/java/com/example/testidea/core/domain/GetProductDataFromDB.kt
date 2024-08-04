@@ -6,6 +6,9 @@ For a small app no need for them, and Repository can be provided directly to the
 package com.example.testidea.core.domain
 
 import com.example.testidea.data.ProductRepository
+import com.example.testidea.data.db.ProductEntity
+import kotlinx.coroutines.flow.Flow
 
-class GetProducts(repo: ProductRepository) {
+class GetProductDataFromDB(private val repository: ProductRepository) {
+    suspend operator fun invoke(): Flow<List<ProductEntity>> = repository.getAllProducts()
 }
