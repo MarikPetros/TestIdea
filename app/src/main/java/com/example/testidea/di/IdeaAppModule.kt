@@ -1,9 +1,9 @@
 package com.example.testidea.di
 
 import androidx.room.Room
-import com.example.testidea.core.domain.GetProducstsBySearchQuery
 import com.example.testidea.core.domain.GetProductDataFromDB
 import com.example.testidea.core.domain.GetProductDataFromRemote
+import com.example.testidea.core.domain.GetProductsBySearchQuery
 import com.example.testidea.core.domain.RemoveProductData
 import com.example.testidea.core.domain.UpdateProductData
 import com.example.testidea.data.DummyData
@@ -12,7 +12,7 @@ import com.example.testidea.data.db.ProductsDB
 import com.example.testidea.ui.view_models.ProductViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
-import org.koin.core.module.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val ideaAppModule = module {
@@ -23,22 +23,16 @@ val ideaAppModule = module {
             "products_database"
         ).build()
     }
-    single { DummyData() }
     single { get<ProductsDB>().productDao() }
+    single { DummyData() }
     single { ProductRepository(get(), Dispatchers.IO) }
 
     single { GetProductDataFromRemote(get(), get()) }
     single { GetProductDataFromDB(get()) }
-    factory { (repo: ProductRepository, id: Int) -> RemoveProductData(repo, id) }
-    factory { (repo: ProductRepository, string: String) -> GetProducstsBySearchQuery(repo, string) }
-    factory { (repo: ProductRepository, id: Int, amount: Int) ->
-        UpdateProductData(
-            repo,
-            id,
-            amount
-        )
-    }
+    single { RemoveProductData(get()) }
+    single { GetProductsBySearchQuery(get()) }
+    single { UpdateProductData(get()) }
 
-    viewModel { ProductViewModel(get()) }
+    viewModel { ProductViewModel(get(), get(), get(), get(), get()) }
 }
 

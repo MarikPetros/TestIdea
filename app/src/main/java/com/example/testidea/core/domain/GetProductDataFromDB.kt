@@ -10,5 +10,5 @@ import com.example.testidea.data.db.ProductEntity
 import kotlinx.coroutines.flow.Flow
 
 class GetProductDataFromDB(private val repository: ProductRepository) {
-    suspend operator fun invoke(): Flow<List<ProductEntity>> = repository.getAllProducts()
+    operator fun invoke() = repository.getAllProducts()
 }

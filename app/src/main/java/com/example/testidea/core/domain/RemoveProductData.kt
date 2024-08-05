@@ -6,8 +6,7 @@ For a small app no need for them, and Repository can be provided directly to the
 package com.example.testidea.core.domain
 
 import com.example.testidea.data.ProductRepository
-import com.example.testidea.di.ideaAppModule
 
-class RemoveProductData(private  val repository: ProductRepository, private val id: Int) {
-    suspend operator fun invoke() = repository.deleteProduct(id = id)
+class RemoveProductData(private val repository: ProductRepository) {
+    suspend fun removeProduct(id: Int) = repository.deleteProduct(id = id)
 }

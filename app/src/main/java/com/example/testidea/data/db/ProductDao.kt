@@ -1,7 +1,6 @@
 package com.example.testidea.data.db
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,13 +15,12 @@ interface ProductDao {
     @Query("UPDATE products SET amount = :amount WHERE id= :id")
     suspend fun updateProductAmountById(id: Int, amount: Int)
 
-    @Delete
     @Query("DELETE FROM products WHERE id= :id")
     suspend fun deleteProduct(id: Int)
 
     @Query("SELECT * FROM products")
-    suspend fun getAllProducts(): Flow<List<ProductEntity>>
+    fun getAllProducts(): Flow<List<ProductEntity>>
 
     @Query("SELECT * FROM products WHERE name LIKE '%' || :text || '%'")
-    suspend fun getProductsBySearchQuery(text: String): Flow<List<ProductEntity>>
+    fun getProductsBySearchQuery(text: String): Flow<List<ProductEntity>>
 }

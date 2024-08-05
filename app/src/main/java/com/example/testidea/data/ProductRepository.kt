@@ -30,15 +30,11 @@ class ProductRepository(
         }
     }
 
-    suspend fun getAllProducts(): Flow<List<ProductEntity>> {
-        return withContext(defaultDispatcher) {
-            productDao.getAllProducts()
-        }
+    fun getAllProducts(): Flow<List<ProductEntity>> {
+       return productDao.getAllProducts()
     }
 
-    suspend fun getProductsBySearchQuery(text: String): Flow<List<ProductEntity>> {
-        return withContext(defaultDispatcher) {
-            productDao.getProductsBySearchQuery(text)
-        }
+    fun getProductsBySearchQuery(text: String): Flow<List<ProductEntity>> {
+       return productDao.getProductsBySearchQuery(text)
     }
 }

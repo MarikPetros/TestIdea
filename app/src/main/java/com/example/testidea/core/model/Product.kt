@@ -6,7 +6,7 @@ data class Product(
     val id: Int,
     val name: String,
     var time: Int,
-    val tags: MutableList<String>,
+    var tags: MutableList<String>,
     var amount: Int
 )
 
