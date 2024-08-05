@@ -43,14 +43,21 @@ class ProductViewModel(
             initialValue = emptyList()
         )
 
-    private val _searchResults = MutableStateFlow<List<ProductEntity>>(emptyList())
-    val searchResults: StateFlow<List<ProductEntity>> = _searchResults.asStateFlow()
+    private val _searchResultsEntity = MutableStateFlow<List<ProductEntity>>(emptyList())
+    private val _searchResults = _searchResultsEntity.map { list: List<ProductEntity> ->
+        list.map { productEntity -> productEntity.toProduct() }
+    }
+    val searchResults: StateFlow<List<Product>> = _searchResults.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
     fun searchProducts(query: String) {
         viewModelScope.launch {
             val searcher = getProductsBySearchQuery.searchProduct(string = query)
             searcher.collect { results ->
-                _searchResults.value = results
+                _searchResultsEntity.value = results
             }
         }
     }
