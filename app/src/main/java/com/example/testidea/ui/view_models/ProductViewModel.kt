@@ -14,21 +14,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProductViewModel(
     private val getterFromRemote: GetProductDataFromRemote,
-    getterFromDB: GetProductDataFromDB,
+    private val getterFromDB: GetProductDataFromDB,
     private val getProductsBySearchQuery: GetProductsBySearchQuery,
     private val updateProductData: UpdateProductData,
     private val removeProductData: RemoveProductData
 ) : ViewModel() {
 
-    fun addDataToDB() {
-        viewModelScope.launch { getterFromRemote() }
+    init {
+        viewModelScope.launch {
+            getterFromRemote()
+        }
     }
 
     private val productsFlow: Flow<List<Product>> =
@@ -47,18 +49,15 @@ class ProductViewModel(
     private val _searchResults = _searchResultsEntity.map { list: List<ProductEntity> ->
         list.map { productEntity -> productEntity.toProduct() }
     }
-    val searchResults: StateFlow<List<Product>> = _searchResults.stateIn(
+    val searchResultsStateFlow: StateFlow<List<Product>> = _searchResults.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
     )
-
     fun searchProducts(query: String) {
         viewModelScope.launch {
-            val searcher = getProductsBySearchQuery.searchProduct(string = query)
-            searcher.collect { results ->
-                _searchResultsEntity.value = results
-            }
+            _searchResultsEntity.value = getProductsBySearchQuery.searchProduct(string = query).first()
+
         }
     }
 

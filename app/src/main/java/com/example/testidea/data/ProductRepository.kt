@@ -31,10 +31,10 @@ class ProductRepository(
     }
 
     fun getAllProducts(): Flow<List<ProductEntity>> {
-       return productDao.getAllProducts()
+        return productDao.getAllProducts()
     }
 
     fun getProductsBySearchQuery(text: String): Flow<List<ProductEntity>> {
-       return productDao.getProductsBySearchQuery(text)
+        return productDao.getProductsBySearchQuery(text)
     }
 }

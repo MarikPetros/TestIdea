@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.example.testidea.core.model.Product
 import com.example.testidea.ui.components.ProductCard
 import com.example.testidea.ui.components.ProductsBottomBar
 import com.example.testidea.ui.components.ProductsTopBar
@@ -33,9 +32,14 @@ import com.example.testidea.ui.view_models.ProductViewModel
 
 @Composable
 fun TestIdeaApp(
-    productList: List<Product>,
+    viewModel: ProductViewModel,
     modifier: Modifier = Modifier
 ) {
+    val products by viewModel.productsStateFlow.collectAsState()
+    val searchResults by viewModel.searchResultsStateFlow.collectAsState()
+    var isInSearch by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     TestIdeaTheme {
         Scaffold(
@@ -54,7 +58,6 @@ fun TestIdeaApp(
             ) {
                 var searchText by rememberSaveable { mutableStateOf("") }
                 val listState = rememberLazyListState()
-//                val coroutineScope = rememberCoroutineScope()// TODO  investigate and remove
                 val configuration = LocalConfiguration.current
                 val screenHeight = configuration.screenHeightDp
 
@@ -97,15 +100,19 @@ fun TestIdeaApp(
                         ) {
                             SearchField(
                                 value = searchText,
-                                onValueChange = { searchText = it },
-                                onSearch = {
-                                    // Perform search here
+                                onValueChange = {
+                                    searchText = it
+                                    viewModel.searchProducts(searchText)
+                                    isInSearch = true
                                 },
                             )
                         }
 
                     }
-                    items(productList, key = { it.id }) { product ->
+                    items(
+                        if (!isInSearch) products else searchResults,
+                        key = { it.id }
+                    ) { product ->
                         Box(
                             modifier = Modifier.padding(
                                 top = 4.dp,
