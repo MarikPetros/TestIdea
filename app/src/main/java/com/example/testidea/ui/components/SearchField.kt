@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.testidea.R
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +53,13 @@ fun SearchField(
     var isFocused by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = value) { // Trigger when text changes
+        if (value.isNotEmpty()) {
+            delay(100) // Add a small delay if needed
+            showClearIcon = true
+        }
+    }
 
     val animatedHorizontalOffset by animateDpAsState(
         targetValue = if (isFocused) (-45).dp else 0.dp,
@@ -93,8 +103,8 @@ fun SearchField(
                     showClearIcon = false
                 }) {
                     Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close"
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = "Clear"
                     )
                 }
             }
