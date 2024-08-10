@@ -15,7 +15,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.example.testidea.core.model.Product
 import com.example.testidea.ui.components.DeleteProductDialog
 import com.example.testidea.ui.components.EditAmountDialog
 import com.example.testidea.ui.components.ProductCard
@@ -44,7 +42,6 @@ fun TestIdeaApp(
     val searchResults by viewModel.searchResultsStateFlow.collectAsState()
     var isInSearch by rememberSaveable { mutableStateOf(false) }
 
-    val items = remember { mutableStateListOf<Product>(/* your card data */) }
     var selectedProductAmount by remember { mutableIntStateOf(-1) }
     var showAmountEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -162,8 +159,15 @@ fun TestIdeaApp(
         EditAmountDialog(
             card = selectedCard,
             initialAmount = selectedProductAmount,
-            onAmountChange = { selectedCard, newAmount -> viewModel.updateProduct(selectedCard, newAmount) },
-            onDismiss = {showAmountEditDialog =false }
+            onAmountChange = { productId, newAmount ->
+                viewModel.updateProduct(
+                    productId,
+                    newAmount
+                )
+            },
+            onDismiss = { showAmountEditDialog = false }
         )
     }
 }
+
+

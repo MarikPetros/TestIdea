@@ -1,5 +1,6 @@
 package com.example.testidea.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -11,19 +12,12 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardDefaults.shape
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +28,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.testidea.R
 import com.example.testidea.core.model.Product
 import com.example.testidea.ui.theme.TestIdeaTheme
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -44,11 +40,6 @@ fun ProductCard(
     modifier: Modifier = Modifier,
     elevation: Dp = Dp(1f),
 ) {
-    var productAmount by remember { mutableIntStateOf(product.amount) }
-    var showAmountEditDialog by remember { mutableStateOf(false) }
-
-
-
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(5.dp),
@@ -144,7 +135,7 @@ fun ProductCard(
                 }
             )
             Text(
-                text = product.time.toString(), //TODO օրը դնել
+                text = convertMillisToDate(product.time),
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.constrainAs(date) {
                     start.linkTo(guideline)
@@ -155,20 +146,30 @@ fun ProductCard(
     }
 }
 
+@SuppressLint("SimpleDateFormat")
+fun convertMillisToDate(millis: Long): String {
+    val sdf = SimpleDateFormat("dd.MM.yyyy")
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = millis
+    return sdf.format(calendar.time)
+}
 
-//@PreviewLightDark
-////@PreviewScreenSizes
-//@Composable
-//private fun ProductCardPreview() {
-//    TestIdeaTheme {
-//        ProductCard(
-//            product = Product(
-//                8,
-//                "Amazon Kindle Paperwhite",
-//                0,
-//                mutableListOf("Электронная книга", "Последний шанс", "Ограниченный"),
-//                18
-//            )
-//        )
-//    }
-//}
+
+@PreviewLightDark
+//@PreviewScreenSizes
+@Composable
+private fun ProductCardPreview() {
+    TestIdeaTheme {
+        ProductCard(
+            product = Product(
+                8,
+                "Amazon Kindle Paperwhite",
+                0,
+                mutableListOf("Электронная книга", "Последний шанс", "Ограниченный"),
+                18
+            ),
+            onEdit = {},
+            onDelete = {}
+        )
+    }
+}

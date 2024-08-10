@@ -18,9 +18,8 @@ class GetProductDataFromRemote(
     dummyData: DummyData,
 ) {
     private val productEntityList = dummyData.data.map { product ->
-        product.toEntity().apply {
-            time = System.currentTimeMillis().toInt()
-        }
+        product.toEntity()
     }
+
     suspend operator fun invoke() = repository.insertAll(productEntityList)
 }

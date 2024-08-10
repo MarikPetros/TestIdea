@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,32 +48,32 @@ fun EditAmountDialog(
         onDismissRequest = onDismiss,
     ) {
         Surface(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(24.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(24.dp)
             ) {
                 // Settings icon on top center
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(28.dp)
                         .align(Alignment.CenterHorizontally)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
                     text = stringResource(R.string.product_amount),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -84,37 +83,34 @@ fun EditAmountDialog(
                     OutlinedButton(
                         onClick = { amount-- },
                         shape = CircleShape,
-                        border = BorderStroke(4.dp, MaterialTheme.colorScheme.primary),
+                        border = BorderStroke(3.dp, MaterialTheme.colorScheme.primary),
                         contentPadding = PaddingValues(0.dp), // Remove padding
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(28.dp)
                     ) {
-                        Text(
-                            "-",
-                            fontSize = 40.sp
-                        )
+                        Text("-", fontSize = 20.sp)
                     }
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(30.dp))
 
                     Text(
                         text = amount.toString(),
                         fontSize = 20.sp
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(30.dp))
 
                     OutlinedButton(
                         onClick = { amount++ },
                         shape = CircleShape,
-                        border = BorderStroke(4.dp, MaterialTheme.colorScheme.primary),
+                        border = BorderStroke(3.dp, MaterialTheme.colorScheme.primary),
                         contentPadding = PaddingValues(0.dp),
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(28.dp)
                     ) {
-                        Text("+", fontSize = 40.sp)
+                        Text("+", fontSize = 20.sp)
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     modifier = Modifier

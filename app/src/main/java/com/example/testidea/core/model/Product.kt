@@ -5,7 +5,7 @@ import com.example.testidea.data.db.ProductEntity
 data class Product(
     val id: Int,
     val name: String,
-    var time: Int,
+    var time: Long,
     var tags: MutableList<String>,
     var amount: Int
 )

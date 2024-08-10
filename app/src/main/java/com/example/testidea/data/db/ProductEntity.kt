@@ -9,7 +9,7 @@ data class ProductEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    var time: Int,
+    var time: Long,
     var tags: MutableList<String>,
     var amount: Int
 )
