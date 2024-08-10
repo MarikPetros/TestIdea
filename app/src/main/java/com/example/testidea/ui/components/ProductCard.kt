@@ -14,10 +14,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.shape
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -33,9 +39,16 @@ import com.example.testidea.ui.theme.TestIdeaTheme
 @Composable
 fun ProductCard(
     product: Product,
+    onDelete: () -> Unit,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier,
-    elevation: Dp = Dp(0f),
+    elevation: Dp = Dp(1f),
 ) {
+    var productAmount by remember { mutableIntStateOf(product.amount) }
+    var showAmountEditDialog by remember { mutableStateOf(false) }
+
+
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(5.dp),
@@ -65,24 +78,32 @@ fun ProductCard(
                     start.linkTo(parent.start)
                 }
             )
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = stringResource(R.string.delete_item),
+            IconButton(
+                onClick = { onDelete() },
                 modifier = Modifier.constrainAs(delete) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end, margin = 8.dp)
-                },
-                tint = MaterialTheme.colorScheme.error
-            )
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = stringResource(R.string.edit_amount),
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = stringResource(R.string.delete_item),
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+            IconButton(
+                onClick = { onEdit() },
                 modifier = Modifier.constrainAs(edit) {
                     top.linkTo(parent.top)
                     end.linkTo(delete.start, margin = 16.dp)
-                },
-                tint = MaterialTheme.colorScheme.tertiary
-            )
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(R.string.edit_amount),
+                    tint = MaterialTheme.colorScheme.tertiary
+                )
+            }
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalArrangement = Arrangement.spacedBy((-11).dp),
@@ -135,19 +156,19 @@ fun ProductCard(
 }
 
 
-@PreviewLightDark
-//@PreviewScreenSizes
-@Composable
-private fun ProductCardPreview() {
-    TestIdeaTheme {
-        ProductCard(
-            product = Product(
-                8,
-                "Amazon Kindle Paperwhite",
-                0,
-                mutableListOf("Электронная книга", "Последний шанс", "Ограниченный"),
-                18
-            )
-        )
-    }
-}
+//@PreviewLightDark
+////@PreviewScreenSizes
+//@Composable
+//private fun ProductCardPreview() {
+//    TestIdeaTheme {
+//        ProductCard(
+//            product = Product(
+//                8,
+//                "Amazon Kindle Paperwhite",
+//                0,
+//                mutableListOf("Электронная книга", "Последний шанс", "Ограниченный"),
+//                18
+//            )
+//        )
+//    }
+//}
