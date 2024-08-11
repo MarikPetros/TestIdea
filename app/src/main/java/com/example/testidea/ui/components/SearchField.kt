@@ -23,6 +23,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,14 +56,13 @@ fun SearchField(
     val focusManager = LocalFocusManager.current
 
     val borderWidth = 2.dp
-    val deletedBorderWidth = 120.dp
 
     val strokeWidth = with(LocalDensity.current) { borderWidth.toPx() }
-    val deletedWidth = with(LocalDensity.current) { deletedBorderWidth.toPx() }
     val cornerRadius = with(LocalDensity.current) { 10.dp.toPx() }
     val borderStartSize = with(LocalDensity.current) { 16.dp.toPx() }
     val borderColor = MaterialTheme.colorScheme.primary
 
+    var textWidth by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(key1 = value) { // Trigger when text changes
         if (value.isNotEmpty()) {
@@ -84,14 +84,11 @@ fun SearchField(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         ),
-        finishedListener = { dp ->
-        }
     )
     val animatedFontSize by animateFloatAsState(
         targetValue = if (isFocused) 0.8f else 1f
     )
 
-    val textWidth = remember { mutableStateOf(130) }
 
     OutlinedTextField(
         value = value,
@@ -123,6 +120,9 @@ fun SearchField(
         placeholder = {
             Text(
                 stringResource(R.string.search_product),
+                onTextLayout = { textLayoutResult ->
+                    textWidth = textLayoutResult.size.width
+                },
                 modifier = Modifier
                     .padding(2.dp)
                     .offset(x = animatedHorizontalOffset, y = animatedVerticalOffset)
@@ -130,8 +130,8 @@ fun SearchField(
                 fontSize =
                 if (value.isEmpty()) MaterialTheme.typography.bodyLarge.fontSize
                 else MaterialTheme.typography.bodySmall.fontSize
-            )
 
+            )
         },
         modifier = Modifier
             .onFocusChanged { isFocused = it.isFocused }
@@ -140,8 +140,8 @@ fun SearchField(
                 if (isFocused) {
                     drawRoundRect(
                         color = borderColor,
-                        topLeft = Offset(deletedWidth, 0f),
-                        size = Size(size.width - deletedWidth, strokeWidth),
+                        topLeft = Offset(textWidth.toFloat(), 0f),
+                        size = Size(size.width - textWidth.toFloat(), strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
                         style = Stroke(strokeWidth * 2)
                     )
