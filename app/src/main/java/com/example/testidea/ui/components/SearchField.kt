@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
@@ -60,6 +61,7 @@ fun SearchField(
 
     val strokeWidth = with(LocalDensity.current) { borderWidth.toPx() }
     val deletedWidth = with(LocalDensity.current) { deletedBorderWidth.toPx() }
+    val cornerRadius = with(LocalDensity.current) {10.dp.toPx()}
     val borderColor = MaterialTheme.colorScheme.primary
 
 
@@ -91,7 +93,6 @@ fun SearchField(
     )
 
     val textWidth = remember { mutableStateOf(130) }
-//    var placeholderVisible by remember { mutableStateOf(true) }
 
     OutlinedTextField(
         value = value,
@@ -125,22 +126,6 @@ fun SearchField(
                 stringResource(R.string.search_product),
                 modifier = Modifier
                     .padding(2.dp)
-
-//                    .drawWithContent {
-//                        drawContent()
-//                        drawContext.canvas.saveLayer(size.toRect(), Paint().apply {
-//                           PorterDuffXfermode(PorterDuff.Mode.DST_OVER)
-//                        })
-//                        // Draw the composable content first
-//                        // Then draw the rounded rectangle on top
-//                        drawRoundRect(
-//                            color = Color.White,
-//                            cornerRadius = CornerRadius(4.dp.toPx()),
-//                            style = Stroke(width = 2.dp.toPx()),
-////                            blendMode = BlendMode.Multiply
-//                        )
-//                        drawContext.canvas.restore()
-//                    }
                     .offset(x = animatedHorizontalOffset, y = animatedVerticalOffset)
                     .scale(animatedFontSize),
                 fontSize =
@@ -154,39 +139,42 @@ fun SearchField(
             .fillMaxWidth()
             .drawBehind {
                 if (isFocused) {
-
-                    // Draw the top border (excluding the deleted part)
-                    drawLine(
-                        color = borderColor, // Or your desired color
-                        start = Offset(deletedWidth, 0f),
-                        end = Offset(size.width + strokeWidth, 0f),
-                        strokeWidth = strokeWidth * 2
+                    drawRoundRect(
+                        color = borderColor,
+                        topLeft = Offset(deletedWidth, 0f),
+                        size = Size(size.width - deletedWidth, strokeWidth),
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                        style = Stroke(strokeWidth*2)
                     )
 
-                    // Draw other borders (right, bottom, left)
-                    drawLine(
+                    // Draw other rounded borders (right, bottom, left)
+                    drawRoundRect(
                         color = borderColor,
-                        start = Offset(size.width + strokeWidth/2, 0f),
-                        end = Offset(size.width + strokeWidth, size.height + strokeWidth),
-                        strokeWidth = strokeWidth
+                        topLeft = Offset(size.width - strokeWidth, 0f),
+                        size = Size(strokeWidth, size.height),
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                        style = Stroke(strokeWidth*2)
                     )
-                    drawLine(
+                    drawRoundRect(
                         color = borderColor,
-                        start = Offset(0f - strokeWidth/2, size.height + strokeWidth/2),
-                        end = Offset(size.width + strokeWidth/2, size.height + strokeWidth/2),
-                        strokeWidth = strokeWidth
+                        topLeft = Offset(0f, size.height - strokeWidth),
+                        size = Size(size.width, strokeWidth),
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                        style = Stroke(strokeWidth*2)
                     )
-                    drawLine(
+                    drawRoundRect(
                         color = borderColor,
-                        start = Offset(0f - strokeWidth, 0f - strokeWidth),
-                        end = Offset(0f - strokeWidth/2, size.height + strokeWidth),
-                        strokeWidth = strokeWidth
+                        topLeft = Offset(0f, 0f),
+                        size = Size(strokeWidth, size.height),
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                        style = Stroke(strokeWidth*2)
                     )
-                    drawLine(
+                    drawRoundRect(
                         color = borderColor,
-                        start = Offset(0f - strokeWidth/2, 0f - strokeWidth/2),
-                        end = Offset(40f, 0f - strokeWidth/2),
-                        strokeWidth = strokeWidth
+                        topLeft = Offset(0f, 0f),
+                        size = Size(40f, strokeWidth),
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                        style = Stroke(strokeWidth*2)
                     )
                 } else {
                     // Draw the default OutlinedTextField border
@@ -210,48 +198,5 @@ fun SearchField(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
         )
-//        decorationBox = { innerTextField ->
-//            // Draw the border manually
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(4.dp) // Add padding if needed
-//                    .drawBehind {
-//                        val strokeWidth = 2.dp.toPx() // Set border width
-//                        val cutOffStart = cutOffWidth.toPx()
-//
-//                        // Draw the top border with a cutout
-//                        drawLine(
-//                            color = Color.Black, // Set border color
-//                            start = Offset(cutOffStart, 0f),
-//                            end = Offset(size.width, 0f),
-//                            strokeWidth = strokeWidth
-//                        )
-//
-//                        // Draw the other borders
-//                        drawLine(
-//                            color = Color.Black,
-//                            start = Offset(0f, 0f),
-//                            end = Offset(0f, size.height),
-//                            strokeWidth = strokeWidth
-//                        )
-//                        drawLine(
-//                            color = Color.Black,
-//                            start = Offset(0f, size.height),
-//                            end = Offset(size.width, size.height),
-//                            strokeWidth = strokeWidth
-//                        )
-//                        drawLine(
-//                            color = Color.Black,
-//                            start = Offset(size.width, 0f),
-//                            end = Offset(size.width, size.height),
-//                            strokeWidth = strokeWidth
-//                        )
-//                    }
-//            ) {
-//                innerTextField() // Place the actual text field inside
-//            }
-//        }
-
     )
 }
