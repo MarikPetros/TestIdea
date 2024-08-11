@@ -72,8 +72,8 @@ fun ProductCard(
             IconButton(
                 onClick = { onDelete() },
                 modifier = Modifier.constrainAs(delete) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end, margin = 8.dp)
+                    top.linkTo(parent.top, margin = (-10).dp)
+                    end.linkTo(parent.end)
                 }
             ) {
                 Icon(
@@ -85,8 +85,8 @@ fun ProductCard(
             IconButton(
                 onClick = { onEdit() },
                 modifier = Modifier.constrainAs(edit) {
-                    top.linkTo(parent.top)
-                    end.linkTo(delete.start, margin = 16.dp)
+                    top.linkTo(parent.top, margin = (-10).dp)
+                    end.linkTo(delete.start)
                 }
             ) {
                 Icon(
@@ -104,10 +104,12 @@ fun ProductCard(
                 },
             ) {
                 product.tags.forEach { chip ->
-                    SuggestionChip(
-                        onClick = {},
-                        label = { Text(chip) }
-                    )
+                    if (chip.isNotEmpty()) {
+                        SuggestionChip(
+                            onClick = {},
+                            label = { Text(chip) }
+                        )
+                    }
                 }
             }
             Text(
@@ -154,9 +156,7 @@ fun convertMillisToDate(millis: Long): String {
     return sdf.format(calendar.time)
 }
 
-
 @PreviewLightDark
-//@PreviewScreenSizes
 @Composable
 private fun ProductCardPreview() {
     TestIdeaTheme {
