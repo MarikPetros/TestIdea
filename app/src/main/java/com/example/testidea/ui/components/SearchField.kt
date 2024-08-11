@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import com.example.testidea.R
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchField(
     value: String,
@@ -61,7 +59,8 @@ fun SearchField(
 
     val strokeWidth = with(LocalDensity.current) { borderWidth.toPx() }
     val deletedWidth = with(LocalDensity.current) { deletedBorderWidth.toPx() }
-    val cornerRadius = with(LocalDensity.current) {10.dp.toPx()}
+    val cornerRadius = with(LocalDensity.current) { 10.dp.toPx() }
+    val borderStartSize = with(LocalDensity.current) { 16.dp.toPx() }
     val borderColor = MaterialTheme.colorScheme.primary
 
 
@@ -144,7 +143,7 @@ fun SearchField(
                         topLeft = Offset(deletedWidth, 0f),
                         size = Size(size.width - deletedWidth, strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth*2)
+                        style = Stroke(strokeWidth * 2)
                     )
 
                     // Draw other rounded borders (right, bottom, left)
@@ -153,28 +152,28 @@ fun SearchField(
                         topLeft = Offset(size.width - strokeWidth, 0f),
                         size = Size(strokeWidth, size.height),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth*2)
+                        style = Stroke(strokeWidth * 2)
                     )
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(0f, size.height - strokeWidth),
                         size = Size(size.width, strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth*2)
+                        style = Stroke(strokeWidth * 2)
                     )
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(0f, 0f),
                         size = Size(strokeWidth, size.height),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth*2)
+                        style = Stroke(strokeWidth * 2)
                     )
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(0f, 0f),
-                        size = Size(40f, strokeWidth),
+                        size = Size(borderStartSize, strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth*2)
+                        style = Stroke(strokeWidth * 2)
                     )
                 } else {
                     // Draw the default OutlinedTextField border
