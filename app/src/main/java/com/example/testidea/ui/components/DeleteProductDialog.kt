@@ -1,7 +1,7 @@
 package com.example.testidea.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +21,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,10 +30,8 @@ import com.example.testidea.R
 
 @Composable
 fun DeleteProductDialog(
-    card: Int,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -42,13 +41,14 @@ fun DeleteProductDialog(
             ) {
             Column(
                 modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                     .padding(16.dp),
             ) {
-                // Settings icon on top center
                 Icon(
                     imageVector = Icons.Default.Warning,
                     contentDescription = "Settings",
                     modifier = Modifier
+                        .alpha(0.8f)
                         .size(24.dp)
                         .align(Alignment.CenterHorizontally)
                 )
@@ -77,13 +77,19 @@ fun DeleteProductDialog(
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = { onDismiss() }) {
-                        Text(stringResource(R.string.no))
+                        Text(
+                            stringResource(R.string.no),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
 
                     TextButton(onClick = { onConfirm(); onDismiss() }) {
-                        Text(stringResource(R.string.yes))
+                        Text(
+                            stringResource(R.string.yes),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
                 }
             }
@@ -91,13 +97,3 @@ fun DeleteProductDialog(
         }
     }
 }
-
-//@PreviewLightDark
-//@PreviewScreenSizes
-//@Composable
-//private fun DeleteProductDialogPreview() {
-//    TestIdeaTheme {
-//        DeleteProductDialog(onConfirm = { /*TODO*/ }, onDismiss = { /*TODO*/ })
-//
-//    }
-//}

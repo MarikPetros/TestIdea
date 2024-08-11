@@ -149,7 +149,6 @@ fun TestIdeaApp(
 
     if (showDeleteDialog) {
         DeleteProductDialog(
-            card = selectedCard,
             onConfirm = { viewModel.removeProduct(selectedCard) },
             onDismiss = { showDeleteDialog = false },
         )
@@ -159,9 +158,9 @@ fun TestIdeaApp(
         EditAmountDialog(
             card = selectedCard,
             initialAmount = selectedProductAmount,
-            onAmountChange = { productId, newAmount ->
+            onAmountChange = { selectedCardId, newAmount ->
                 viewModel.updateProduct(
-                    productId,
+                    selectedCardId,
                     newAmount
                 )
             },
