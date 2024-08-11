@@ -1,19 +1,13 @@
 package com.example.testidea.ui.components
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,25 +28,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.toRect
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.testidea.R
-import com.example.testidea.ui.theme.backgroundDark
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +55,13 @@ fun SearchField(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    val cutOffWidth = 40.dp
+    val borderWidth = 2.dp
+    val deletedBorderWidth = 120.dp
+
+    val strokeWidth = with(LocalDensity.current) { borderWidth.toPx() }
+    val deletedWidth = with(LocalDensity.current) { deletedBorderWidth.toPx() }
+    val borderColor = MaterialTheme.colorScheme.primary
+
 
     LaunchedEffect(key1 = value) { // Trigger when text changes
         if (value.isNotEmpty()) {
@@ -126,7 +121,6 @@ fun SearchField(
             }
         },
         placeholder = {
-
             Text(
                 stringResource(R.string.search_product),
                 modifier = Modifier
@@ -158,11 +152,51 @@ fun SearchField(
         modifier = Modifier
             .onFocusChanged { isFocused = it.isFocused }
             .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(4.dp)
-            ),
+            .drawBehind {
+                if (isFocused) {
+
+                    // Draw the top border (excluding the deleted part)
+                    drawLine(
+                        color = borderColor, // Or your desired color
+                        start = Offset(deletedWidth, 0f),
+                        end = Offset(size.width + strokeWidth, 0f),
+                        strokeWidth = strokeWidth * 2
+                    )
+
+                    // Draw other borders (right, bottom, left)
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(size.width + strokeWidth/2, 0f),
+                        end = Offset(size.width + strokeWidth, size.height + strokeWidth),
+                        strokeWidth = strokeWidth
+                    )
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(0f - strokeWidth/2, size.height + strokeWidth/2),
+                        end = Offset(size.width + strokeWidth/2, size.height + strokeWidth/2),
+                        strokeWidth = strokeWidth
+                    )
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(0f - strokeWidth, 0f - strokeWidth),
+                        end = Offset(0f - strokeWidth/2, size.height + strokeWidth),
+                        strokeWidth = strokeWidth
+                    )
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(0f - strokeWidth/2, 0f - strokeWidth/2),
+                        end = Offset(40f, 0f - strokeWidth/2),
+                        strokeWidth = strokeWidth
+                    )
+                } else {
+                    // Draw the default OutlinedTextField border
+                    drawRoundRect(
+                        color = Color.Black,
+                        style = Stroke(width = borderWidth.toPx()),
+                        cornerRadius = CornerRadius(8f)
+                    )
+                }
+            },
         shape = RoundedCornerShape(4.dp),
         singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -175,7 +209,7 @@ fun SearchField(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
-        ),
+        )
 //        decorationBox = { innerTextField ->
 //            // Draw the border manually
 //            Box(
@@ -218,5 +252,6 @@ fun SearchField(
 //                innerTextField() // Place the actual text field inside
 //            }
 //        }
+
     )
 }
