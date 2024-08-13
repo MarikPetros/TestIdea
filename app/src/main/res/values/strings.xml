@@ -13,4 +13,5 @@
     <string name="delete_dialog_text">Вы действительно хотите удалить выбранный товар?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="abscent">Нет в наличии</string>
 </resources>

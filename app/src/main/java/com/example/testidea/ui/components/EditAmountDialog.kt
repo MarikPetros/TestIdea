@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -82,13 +83,18 @@ fun EditAmountDialog(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.outline_subtract_on_28),
-                        contentDescription = "Decrease",
-                        tint = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier
-                            .size(36.dp)
-                    )
+                    IconButton(
+                        onClick = { amount-- },
+                        enabled = amount > 0
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.outline_subtract_on_28),
+                            contentDescription = "Decrease",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier
+                                .size(36.dp)
+                        )
+                    }
 
                     Spacer(modifier = Modifier.width(30.dp))
 
@@ -99,13 +105,15 @@ fun EditAmountDialog(
 
                     Spacer(modifier = Modifier.width(30.dp))
 
-                    Icon(
-                        painter = painterResource(id = R.drawable.outline_add_circle_outline_28),
-                        contentDescription = "Decrease",
-                        tint = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier
-                            .size(36.dp)
-                    )
+                    IconButton(onClick = { amount++ }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.outline_add_circle_outline_28),
+                            contentDescription = "Decrease",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier
+                                .size(36.dp)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))

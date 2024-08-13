@@ -121,7 +121,8 @@ fun ProductCard(
                 }
             )
             Text(
-                text = product.amount.toString(),
+                text = if(product.amount == 0) stringResource(R.string.abscent)
+                else product.amount.toString(),
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.constrainAs(amount) {
                     start.linkTo(parent.start)
