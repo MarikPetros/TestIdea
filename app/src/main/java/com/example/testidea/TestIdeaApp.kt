@@ -46,6 +46,7 @@ fun TestIdeaApp(
     var showAmountEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var selectedCard by remember { mutableIntStateOf(-1) }
+    var searchText by rememberSaveable { mutableStateOf("") }
 
     TestIdeaTheme {
         Scaffold(
@@ -62,7 +63,6 @@ fun TestIdeaApp(
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
-                var searchText by rememberSaveable { mutableStateOf("") }
                 val listState = rememberLazyListState()
                 val configuration = LocalConfiguration.current
                 val screenHeight = configuration.screenHeightDp
@@ -149,7 +149,9 @@ fun TestIdeaApp(
 
     if (showDeleteDialog) {
         DeleteProductDialog(
-            onConfirm = { viewModel.removeProduct(selectedCard) },
+            onConfirm = {
+                viewModel.removeProduct(selectedCard)
+            },
             onDismiss = { showDeleteDialog = false },
         )
     }

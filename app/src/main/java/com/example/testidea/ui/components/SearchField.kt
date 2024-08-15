@@ -30,6 +30,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -50,6 +52,9 @@ fun SearchField(
     value: String,
     onValueChange: (String) -> Unit,
 ) {
+    var showCursor by remember { mutableStateOf(true) }
+    val focusRequester = remember { FocusRequester() }
+
     var showClearIcon by remember { mutableStateOf(false) }
     var isFocused by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -95,6 +100,7 @@ fun SearchField(
         onValueChange = {
             onValueChange(it)
             showClearIcon = it.isNotEmpty()
+            showCursor = true
         },
         leadingIcon = {
             Icon(
@@ -109,6 +115,10 @@ fun SearchField(
                 IconButton(onClick = {
                     onValueChange("")
                     showClearIcon = false
+//                    isFocused = false
+//                    showCursor = false
+//                    focusRequester.freeFocus()
+//                    keyboardController?.hide()
                 }) {
                     Icon(
                         imageVector = Icons.Default.Clear,
@@ -134,7 +144,11 @@ fun SearchField(
             )
         },
         modifier = Modifier
-            .onFocusChanged { isFocused = it.isFocused }
+            .onFocusChanged {
+                isFocused = it.isFocused
+                showCursor = isFocused
+            }
+            .focusRequester(focusRequester)
             .fillMaxWidth()
             .drawBehind {
                 if (isFocused) {
@@ -188,14 +202,18 @@ fun SearchField(
         singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
+            onValueChange(value)
             keyboardController?.hide()
             focusManager.clearFocus(true)
+            showCursor = false // Hide cursor after search
+            focusRequester.freeFocus()
         }),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
-        )
+            cursorColor = if (showCursor) Color.Black else Color.Transparent
+        ),
     )
 }

@@ -57,7 +57,6 @@ fun EditAmountDialog(
                     .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                     .padding(24.dp)
             ) {
-                // Settings icon on top center
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
