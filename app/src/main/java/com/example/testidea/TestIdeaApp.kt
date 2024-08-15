@@ -151,6 +151,7 @@ fun TestIdeaApp(
         DeleteProductDialog(
             onConfirm = {
                 viewModel.removeProduct(selectedCard)
+                if (isInSearch) viewModel.searchProducts(searchText)
             },
             onDismiss = { showDeleteDialog = false },
         )
@@ -165,6 +166,7 @@ fun TestIdeaApp(
                     selectedCardId,
                     newAmount
                 )
+                if (isInSearch) viewModel.searchProducts(searchText)
             },
             onDismiss = { showAmountEditDialog = false }
         )
