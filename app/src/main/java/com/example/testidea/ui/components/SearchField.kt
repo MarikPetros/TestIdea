@@ -115,10 +115,6 @@ fun SearchField(
                 IconButton(onClick = {
                     onValueChange("")
                     showClearIcon = false
-//                    isFocused = false
-//                    showCursor = false
-//                    focusRequester.freeFocus()
-//                    keyboardController?.hide()
                 }) {
                     Icon(
                         imageVector = Icons.Default.Clear,
