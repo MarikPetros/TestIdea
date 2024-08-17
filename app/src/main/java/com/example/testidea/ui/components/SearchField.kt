@@ -133,10 +133,6 @@ fun SearchField(
                     .padding(2.dp)
                     .offset(x = animatedHorizontalOffset, y = animatedVerticalOffset)
                     .scale(animatedFontSize),
-                fontSize =
-                if (value.isEmpty()) MaterialTheme.typography.bodyLarge.fontSize
-                else MaterialTheme.typography.bodySmall.fontSize
-
             )
         },
         modifier = Modifier

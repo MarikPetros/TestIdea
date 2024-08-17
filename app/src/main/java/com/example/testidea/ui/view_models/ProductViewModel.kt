@@ -31,7 +31,6 @@ class ProductViewModel(
             getterFromDB().collect { productEntityList ->
                 _productsFlow.value = productEntityList
             }
-
         }
     }
 
@@ -59,7 +58,6 @@ class ProductViewModel(
             getProductsBySearchQuery.searchProduct(string = query).collect {
                 _searchResultsEntity.value = it
             }
-
         }
     }
 
