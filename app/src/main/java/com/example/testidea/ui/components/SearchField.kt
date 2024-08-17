@@ -65,7 +65,8 @@ fun SearchField(
     val strokeWidth = with(LocalDensity.current) { borderWidth.toPx() }
     val cornerRadius = with(LocalDensity.current) { 10.dp.toPx() }
     val borderStartSize = with(LocalDensity.current) { 16.dp.toPx() }
-    val borderColor = MaterialTheme.colorScheme.primary
+    val borderColor =
+        if (!isFocused && value.isNotEmpty()) Color.Black else MaterialTheme.colorScheme.primary
 
     var textWidth by remember { mutableIntStateOf(0) }
 
@@ -77,21 +78,22 @@ fun SearchField(
     }
 
     val animatedHorizontalOffset by animateDpAsState(
-        targetValue = if (isFocused) (-45).dp else 0.dp,
+        targetValue = if (isFocused || value.isNotEmpty()) (-47).dp else 0.dp,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
-        )
+        ), label = "animatedX"
     )
     val animatedVerticalOffset by animateDpAsState(
-        targetValue = if (isFocused) (-30).dp else 0.dp,
+        targetValue = if (isFocused || value.isNotEmpty()) (-27).dp else 0.dp,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         ),
+        label = "animatedY",
     )
     val animatedFontSize by animateFloatAsState(
-        targetValue = if (isFocused) 0.8f else 1f
+        targetValue = if (isFocused || value.isNotEmpty()) 0.8f else 1f, label = "animatedFontScale"
     )
 
 
@@ -123,18 +125,6 @@ fun SearchField(
                 }
             }
         },
-        placeholder = {
-            Text(
-                stringResource(R.string.search_product),
-                onTextLayout = { textLayoutResult ->
-                    textWidth = textLayoutResult.size.width
-                },
-                modifier = Modifier
-                    .padding(2.dp)
-                    .offset(x = animatedHorizontalOffset, y = animatedVerticalOffset)
-                    .scale(animatedFontSize),
-            )
-        },
         modifier = Modifier
             .onFocusChanged {
                 isFocused = it.isFocused
@@ -143,13 +133,14 @@ fun SearchField(
             .focusRequester(focusRequester)
             .fillMaxWidth()
             .drawBehind {
-                if (isFocused) {
+                if (isFocused || value.isNotEmpty()) {
+                    val stroke = if (!isFocused) strokeWidth else strokeWidth * 2
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(textWidth.toFloat(), 0f),
                         size = Size(size.width - textWidth.toFloat(), strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth * 2)
+                        style = Stroke(stroke)
                     )
 
                     // Draw other rounded borders (right, bottom, left)
@@ -158,28 +149,28 @@ fun SearchField(
                         topLeft = Offset(size.width - strokeWidth, 0f),
                         size = Size(strokeWidth, size.height),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth * 2)
+                        style = Stroke(stroke)
                     )
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(0f, size.height - strokeWidth),
                         size = Size(size.width, strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth * 2)
+                        style = Stroke(stroke)
                     )
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(0f, 0f),
                         size = Size(strokeWidth, size.height),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth * 2)
+                        style = Stroke(stroke)
                     )
                     drawRoundRect(
                         color = borderColor,
                         topLeft = Offset(0f, 0f),
                         size = Size(borderStartSize, strokeWidth),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                        style = Stroke(strokeWidth * 2)
+                        style = Stroke(stroke)
                     )
                 } else {
                     // Draw the default OutlinedTextField border
@@ -205,7 +196,22 @@ fun SearchField(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
-            cursorColor = if (showCursor) Color.Black else Color.Transparent
+            cursorColor = if (showCursor) Color.Black else Color.Transparent,
         ),
     )
+
+    Text(
+        text = stringResource(R.string.search_product),
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .8f),
+        onTextLayout = { textLayoutResult ->
+            textWidth = textLayoutResult.size.width
+        },
+        modifier = Modifier
+            .padding(start = 55.dp, top = 15.dp)
+            .offset(x = animatedHorizontalOffset, y = animatedVerticalOffset)
+            .scale(animatedFontSize)
+    )
 }
+
+
+
