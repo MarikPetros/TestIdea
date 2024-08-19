@@ -2,7 +2,9 @@ package com.example.testidea
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -121,10 +123,8 @@ fun TestIdeaApp(
                     ) { product ->
                         Box(
                             modifier = Modifier.padding(
-                                top = 4.dp,
-                                start = 8.dp,
-                                end = 8.dp,
-                                bottom = 8.dp
+                                horizontal = 8.dp,
+                                vertical = 2.dp
                             )
                         ) {
                             ProductCard(
@@ -141,6 +141,9 @@ fun TestIdeaApp(
                                 }
                             )
                         }
+                    }
+                    item { 
+                        Spacer(modifier = Modifier.height(4.dp))
                     }
                 }
             }
