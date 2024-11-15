@@ -1,3 +1,66 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# Built application files 
+*.apk 
+*.ap_ 
+*.aab 
+
+# Files for the ART/Dalvik VM 
+*.dex 
+
+# Java class files 
+*.class 
+
+# Generated files 
+bin/ 
+gen/ 
+out/ 
+
+# Gradle files 
+.gradle/ 
+build/ 
+*/build/ 
+
+# Local configuration file (sdk path, etc)
+local.properties 
+
+# Log files 
+*.log 
+
+# Android Studio configuration files 
+.idea/ 
+*.iml 
+
+# Keystore files 
+*.jks 
+*.keystore 
+
+# Proguard files 
+proguard/ proguard-rules.pro 
+
+# NDK directories for compiled binary output 
+obj/ 
+*.so 
+
+# IntelliJ
+.idea/ 
+*.iml 
+*.ipr 
+
+# Miscellaneous 
+*.orig 
+.DS_Store 
+*.swp 
+*.swo 
+*.swn 
+.# 
+
+# Android Studio Navigation Editor temp files 
+.navigation/
+
+# External native build folder generated in build.gradle 
+.cxx/ 
+
+# Symbolic link files 
+*.lnk
